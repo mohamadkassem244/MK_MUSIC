@@ -21,8 +21,18 @@ class GenreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
         ];
+
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules = [
+                'name' => 'sometimes|string|max:255',
+                'description' => 'sometimes|string',
+            ];
+        }
+
+        return $rules;
     }
 }

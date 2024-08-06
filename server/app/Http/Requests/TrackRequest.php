@@ -21,8 +21,28 @@ class TrackRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'title' => 'required|string|max:255',
+            'length' => 'required|date_format:H:i:s',
+            'play_count' => 'nullable|integer|min:0',
+            'image' => 'nullable|string|max:255',
+            'path' => 'required|string|max:255|unique:tracks',
+            'artist_id' => 'required|exists:artists,id',
+            'album_id' => 'required|exists:albums,id',
         ];
+
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules = [
+                'title' => 'sometimes|string|max:255',
+                'length' => 'sometimes|date_format:H:i:s',
+                'play_count' => 'nullable|integer|min:0',
+                'image' => 'nullable|string|max:255',
+                'path' => 'sometimes|string|max:255|unique:tracks',
+                'artist_id' => 'sometimes|exists:artists,id',
+                'album_id' => 'sometimes|exists:albums,id',
+            ];
+        }
+
+        return $rules;
     }
 }

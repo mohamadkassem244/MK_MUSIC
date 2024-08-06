@@ -11,7 +11,7 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,38 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
+            'birth_date' => 'required|date',
+            'image' => 'nullable|string|max:255',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[A-Z]/',
+            ],
         ];
+
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules = [
+                'first_name' => 'sometimes|string|max:255',
+                'last_name' => 'sometimes|string|max:255',
+                'username' => 'sometimes|string|max:255|unique:users',
+                'email' => 'sometimes|string|email|max:255|unique:users',
+                'birth_date' => 'sometimes|date',
+                'image' => 'nullable|string|max:255',
+                'password' => [
+                    'sometimes',
+                    'string',
+                    'min:8',
+                    'regex:/[A-Z]/',
+                ],
+            ];
+        }
+
+        return $rules;
     }
 }

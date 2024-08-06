@@ -21,8 +21,20 @@ class AlbumRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'title' => 'required|string|max:255',
+            'release_date' => 'required|date',
+            'artist_id' => 'required|exists:artists,id',
         ];
+
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules = [
+                'title' => 'sometimes|string|max:255',
+                'release_date' => 'sometimes|date',
+                'artist_id' => 'sometimes|exists:artists,id',
+            ];
+        }
+
+        return $rules;
     }
 }

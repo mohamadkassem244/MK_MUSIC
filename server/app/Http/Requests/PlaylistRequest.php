@@ -21,8 +21,22 @@ class PlaylistRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        $rules = [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'is_public' => 'required|boolean',
+            'user_id' => 'required|exists:users,id',
         ];
+
+        if ($this->isMethod('put') || $this->isMethod('patch')) {
+            $rules = [
+                'name' => 'sometimes|string|max:255',
+                'description' => 'nullable|string',
+                'is_public' => 'sometimes|boolean',
+                'user_id' => 'sometimes|exists:users,id',
+            ];
+        }
+
+        return $rules;
     }
 }
