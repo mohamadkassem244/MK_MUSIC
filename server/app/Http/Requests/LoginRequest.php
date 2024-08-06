@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GenreRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,18 +21,9 @@ class GenreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
+        return [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string',
         ];
-
-        if ($this->isMethod('put') || $this->isMethod('patch')) {
-            $rules = [
-                'name' => 'sometimes|string|max:255',
-                'description' => 'sometimes|string',
-            ];
-        }
-
-        return $rules;
     }
 }
